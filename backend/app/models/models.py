@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from sqlalchemy import Date, DateTime, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, Date, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
@@ -8,6 +8,10 @@ class MarketDay(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(64))
     day: Mapped[date] = mapped_column(Date)
+    # 雨天缩宽：rainy 为真时，街段参与分配的宽度 = 登记宽度 * rain_width_factor
+    rainy: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False, server_default="false")
+    # 有效宽度系数，取 0..1；仅 rainy=True 时生效。非雨天一律忽略，按晴天全长。
+    rain_width_factor: Mapped[float | None] = mapped_column(Float, nullable=True)
 
 class Segment(Base):
     __tablename__ = "segments"
