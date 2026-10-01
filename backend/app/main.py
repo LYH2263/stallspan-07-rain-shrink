@@ -7,11 +7,13 @@ from app.api.router import api_router
 from app.config import settings
 from app.database import Base, SessionLocal, engine
 from app.services.seed import seed_if_empty
+from app.services.startup_migrations import run_startup_migrations
 
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     Base.metadata.create_all(bind=engine)
+    run_startup_migrations()
     if settings.seed_on_empty:
         db = SessionLocal()
         try:

@@ -6,7 +6,8 @@ from app.models.models import MarketDay, Pillar, Segment, Vendor
 def seed_if_empty(db: Session) -> None:
     if (db.scalar(select(func.count()).select_from(MarketDay)) or 0) > 0:
         return
-    day = MarketDay(name="周末夜市", day=date(2026, 9, 20))
+    day = MarketDay(name="周末夜市", day=date(2026, 9, 20),
+                    rainy=True, width_coefficient=0.8)
     db.add(day); db.flush()
     seg = Segment(market_day_id=day.id, name="东街段", width_m=30.0)
     db.add(seg); db.flush()

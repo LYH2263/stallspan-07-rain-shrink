@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from sqlalchemy import Date, DateTime, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, Date, DateTime, Float, ForeignKey, Integer, String, Text, text
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
@@ -8,6 +8,8 @@ class MarketDay(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(64))
     day: Mapped[date] = mapped_column(Date)
+    rainy: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("false"), default=False)
+    width_coefficient: Mapped[float | None] = mapped_column(Float, nullable=True)
 
 class Segment(Base):
     __tablename__ = "segments"
